@@ -179,7 +179,7 @@ def main():
     plotter.add_point(outside_x, outside_y, "outside")
     plotter.show( )
 
-    with open ("output.csv","w") as f:
+    with open ("output2.csv","w") as f:
         for i, n in zip (ptpoints, mbr1 ):
             line= f.writelines(i+","+"\n")
 
