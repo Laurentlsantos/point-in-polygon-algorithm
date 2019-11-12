@@ -11,7 +11,7 @@ def main():
     plotter = Plotter()
 
     # ===================================================================
-
+    # parent class
     class Geometry:
 
         def __init__(self, name):
@@ -21,7 +21,7 @@ def main():
             return self.__name
 
     # ===================================================================
-
+    # subclass
     class Point(Geometry):
         def __init__(self, name, x, y):
             super ( ).__init__ ( name )
@@ -38,7 +38,7 @@ def main():
             pass
 
     # ===================================================================
-
+    # subclass
     class PointReader:
         def __init__(self, points):
             self.points = points
@@ -49,7 +49,7 @@ def main():
                 Point(pid, px, py)
 
      # ===================================================================
-
+    # subclass
     class Line(Geometry):
 
         def __init__(self, name, point_1, point_2):
@@ -57,7 +57,8 @@ def main():
             self.__point_1 = point_1
             self.__point_2 = point_2
 
-
+    # ===================================================================
+    # subclass
     class Polygon(Geometry):
 
         def __init__(self, name, points):
@@ -78,7 +79,8 @@ def main():
             return res
 
     # ===================================================================
-
+    # Designed to extract values from the input polygon and test points
+    # Sorts through and appends the data appropriately
     class Reader:
         id, x, y = [], [], []
 
@@ -117,7 +119,8 @@ def main():
             return self.id, self.x, self.y, self.file, self.points
 
     # ===================================================================
-
+    # create geometry
+    # Request filepath, opens and reads the CSVs files (polygon and test points)
     print("read polygon.csv" )
     path_pol = str(input("Please paste the filepath the csv file containing the coordinates if the polygon:") + "\polygon.csv")
     lectura_1 = Reader(path_pol)
@@ -131,7 +134,8 @@ def main():
     # point_inp = lectura_2.get_pts()
 
     # ===================================================================
-
+    # MBR code is applied to see if the x and y values of each objects fall
+    # within the minimum/ maximim x and y values
 
     class Mbr:
         nc_id = []
@@ -170,22 +174,24 @@ def main():
             return self.nc_x, self.nc_y, self.nc_points, self.outside_x, self.outside_y, self.outside_points
     # ===================================================================
 
+    # Plotter.add_point(pt_x, pt_y)
     plotter.add_polygon(poly_x, poly_y)
 
-
+    # Present the results
     print("categorize points")
     mbr1 = Mbr(ptpoints, min_pol_x, min_pol_y, max_pol_x, max_pol_y )
     nc_x, nc_y, nc_points, outside_x, outside_y, outside_points = mbr1.get_mbr_plot()
 
-
+    # Create a output file with the classification os each point
     def merge_list(list_inside, list_outside):
         output = []
 
+    # Print the results of points and classification
     print ( outside_points )
     print (nc_points)
     final_list = (nc_points + outside_points)
 
-
+    # Save results on the file "output.csv"
     with open ("output.csv","w") as ff:
         for i in zip (final_list):
             line = ff.writelines ( str(i) + "," + "\n" )
