@@ -11,6 +11,7 @@ def main():
     plotter = Plotter()
 
     # ===================================================================
+
     class Geometry:
 
         def __init__(self, name):
@@ -20,6 +21,7 @@ def main():
             return self.__name
 
     # ===================================================================
+
     class Point(Geometry):
         def __init__(self, name, x, y):
             super ( ).__init__ ( name )
@@ -36,6 +38,7 @@ def main():
             pass
 
     # ===================================================================
+
     class PointReader:
         def __init__(self, points):
             self.points = points
@@ -46,6 +49,7 @@ def main():
                 Point(pid, px, py)
 
      # ===================================================================
+
     class Line(Geometry):
 
         def __init__(self, name, point_1, point_2):
@@ -53,7 +57,7 @@ def main():
             self.__point_1 = point_1
             self.__point_2 = point_2
 
-    # ===================================================================
+
     class Polygon(Geometry):
 
         def __init__(self, name, points):
@@ -74,10 +78,11 @@ def main():
             return res
 
     # ===================================================================
+
     class Reader:
         id, x, y = [], [], []
 
-        def __init__(self, orig, prefix):
+        def __init__(self, orig):
             self.id = []
             self.x = []
             self.y = []
@@ -89,12 +94,12 @@ def main():
                 next ( f, None )
                 for col in f.readlines ( ):
                     q, w, e = col.strip ( ).split ( ',' )
-                    self.id.append ( str ( prefix + str ( q ) ) )
+                    self.id.append ( float ( q) )
                     self.x.append ( float ( w ) )
                     self.y.append ( float ( e ) )
             for in_list in self.points:
                 a = int ( in_list[0] )
-                in_list[0] = prefix + str ( a )
+                in_list[0] = str ( a )
 
         def get_points(self):
             return self.points
@@ -112,22 +117,22 @@ def main():
             return self.id, self.x, self.y, self.file, self.points
 
     # ===================================================================
-    #create geometry
 
     print("read polygon.csv" )
-
     path_pol = str(input("Please paste the filepath the csv file containing the coordinates if the polygon:") + "\polygon.csv")
-    lectura_1 = Reader(path_pol, "prefix")
+    lectura_1 = Reader(path_pol)
     poly_id, poly_x, poly_y, poly_file, poly_points = lectura_1.ret_reader()
 
     min_pol_x, max_pol_x, min_pol_y, max_pol_y = min(poly_x ), max(poly_x ), min(poly_y ), max(poly_y )
 
     path_in = input("Please paste the filepath of the csv file containing the points for testing the script:") + "\input.csv"
-    lectura_2 = Reader(path_in, "pt")
+    lectura_2 = Reader(path_in)
     pt_id, pt_x, pt_y, ptfile, ptpoints = lectura_2.ret_reader()
     # point_inp = lectura_2.get_pts()
 
     # ===================================================================
+
+
     class Mbr:
         nc_id = []
         nc_x = []
@@ -154,37 +159,37 @@ def main():
                     self.nc_id.append ( tid )
                     self.nc_x.append ( tx )
                     self.nc_y.append ( ty )
-                    self.nc_points.append ( [tid, tx, ty] )
+                    self.nc_points.append ( ["inside", tid, tx, ty] )
                 else:
                     self.outside_id.append ( tid )
                     self.outside_x.append ( tx )
                     self.outside_y.append ( ty )
-                    self.outside_points.append ( [tid, tx, ty] )
+                    self.outside_points.append ( ["outside", tid, tx, ty] )
 
         def get_mbr_plot(self):
             return self.nc_x, self.nc_y, self.nc_points, self.outside_x, self.outside_y, self.outside_points
     # ===================================================================
 
     plotter.add_polygon(poly_x, poly_y)
-    # plotter.add_point(pt_x, pt_y)
+
 
     print("categorize points")
-
     mbr1 = Mbr(ptpoints, min_pol_x, min_pol_y, max_pol_x, max_pol_y )
-
     nc_x, nc_y, nc_points, outside_x, outside_y, outside_points = mbr1.get_mbr_plot()
 
 
-    plotter.add_point(nc_x, nc_y,)
-    plotter.add_point(outside_x, outside_y, "outside")
-    plotter.show( )
+    def merge_list(list_inside, list_outside):
+        output = []
 
-    with open ("output2.csv","w") as f:
-        for i, n in zip (ptpoints, mbr1 ):
-            line= f.writelines(i+","+"\n")
-
+    print ( outside_points )
+    print (nc_points)
+    final_list = (nc_points + outside_points)
 
 
+    with open ("output.csv","w") as ff:
+        for i in zip (final_list):
+            line = ff.writelines ( str(i) + "," + "\n" )
+        ff.write('\n')
 
 if __name__ == "__main__":
     main ( )
