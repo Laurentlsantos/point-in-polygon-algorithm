@@ -6,7 +6,6 @@ Created on November 2019
 
 from plotter import Plotter
 
-
 def main():
     plotter = Plotter()
 
@@ -22,6 +21,7 @@ def main():
 
     # ===================================================================
     # subclass
+    # to apply to the test point and polygon
     class Point(Geometry):
         def __init__(self, name, x, y):
             super ( ).__init__ ( name )
@@ -36,47 +36,6 @@ def main():
 
         def get_pts(self):
             pass
-
-    # ===================================================================
-    # subclass
-    class PointReader:
-        def __init__(self, points):
-            self.points = points
-            for i in self.points:
-                pid = str(i[0])
-                px = i[1]
-                py = i[2]
-                Point(pid, px, py)
-
-     # ===================================================================
-    # subclass
-    class Line(Geometry):
-
-        def __init__(self, name, point_1, point_2):
-            super().__init__(name)
-            self.__point_1 = point_1
-            self.__point_2 = point_2
-
-    # ===================================================================
-    # subclass
-    class Polygon(Geometry):
-
-        def __init__(self, name, points):
-            super().__init__(name)
-            self.__points = points
-
-        def get_points(self):
-            return self.__points
-
-        def lines(self):
-            res = []
-            points = self.get_points()
-            point_a = points[0]
-            for point_b in points[1:]:
-                res.append(Line(str(point_a.get_name()) + "-" + str(point_b.get_name()), point_a, point_b))
-                point_a = point_b
-            res.append(Line(str(point_a.get_name()) + "-" + str(points[0].get_name()), point_a, points[0]))
-            return res
 
     # ===================================================================
     # Designed to extract values from the input polygon and test points
@@ -131,7 +90,6 @@ def main():
     path_in = input("Please paste the filepath of the csv file containing the points for testing the script:") + "\input.csv"
     lectura_2 = Reader(path_in)
     pt_id, pt_x, pt_y, ptfile, ptpoints = lectura_2.ret_reader()
-    # point_inp = lectura_2.get_pts()
 
     # ===================================================================
     # MBR code is applied to see if the x and y values of each objects fall
